@@ -12,7 +12,7 @@ const PATHS = {
 // and forms the object in which the key is equal to the path relative to the source in the directory
 // and the value is equal to the absolute path to the search file
 
-function entryObject(item) {
+function entryObject(item, src) {
     const paths = glob.sync(`${PATHS.app}/js/**/${item}`);
 
     return function () {
@@ -20,7 +20,7 @@ function entryObject(item) {
 
         paths.forEach(function(path) {
             const pathArr = path.split('/');
-            ret[pathArr.slice(pathArr.indexOf('js') - pathArr.length + 1).join('/')] = path;
+            ret[pathArr.slice(pathArr.indexOf(src) - pathArr.length + 1).join('/')] = path;
         });
 
         return ret;
@@ -28,7 +28,7 @@ function entryObject(item) {
 }
 
 module.exports = {
-    entry: entryObject('index.ts'),
+    entry: entryObject('index.ts', 'js'),
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js'
